@@ -1,5 +1,6 @@
 # Gradle cache files
 .gradle/
+build/
 
 # Jetbrains ides stuff
 .idea/
