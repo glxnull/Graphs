@@ -8,15 +8,18 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import java.awt.Dimension;
 import java.awt.Container;
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 
 public class MainWindow extends JFrame {
 
     // 0 -> Undirected  1 -> Directed
-    public static int GRAPH_KIND = 0;
+    public static int GRAPH_KIND = 1;
 
     public MainWindow() {
         super("Grafos");
@@ -42,6 +45,15 @@ public class MainWindow extends JFrame {
         JMenuItem dijkstraMenuItem = new JMenuItem("Dijkstra");
         JMenuItem primMenuItem = new JMenuItem("Prim");
 
+        directedMenuItem.setMnemonic(KeyEvent.VK_1);
+        directedMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_MASK));
+        undirectedMenuItem.setMnemonic(KeyEvent.VK_2);
+        undirectedMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_MASK));
+        aboutMenuItem.setMnemonic(KeyEvent.VK_F1);
+        aboutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+        exitMenuItem.setMnemonic(KeyEvent.VK_Q);
+        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.ALT_MASK));
+
         GraphPanel graphPanel = new GraphPanel();
 
         ButtonGroup menuGroup = new ButtonGroup();
@@ -65,6 +77,8 @@ public class MainWindow extends JFrame {
 
         frame.setJMenuBar(mainMenu);
 
+        undirectedMenuItem.addActionListener(e -> GRAPH_KIND = 0);
+        directedMenuItem.addActionListener(e -> GRAPH_KIND = 1);
         aboutMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Grafos\n\tVersion: 1.0", "Acerca",
                                         JOptionPane.INFORMATION_MESSAGE));
         exitMenuItem.addActionListener(e -> System.exit(0));
