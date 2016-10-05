@@ -38,17 +38,24 @@ public class MainWindow extends JFrame {
         JMenu helpMenu = new JMenu("Ayuda");
         JMenu graphMenu = new JMenu("Tipo de Grafo");
         JMenu algorithmsMenu = new JMenu("Algoritmos");
+        JMenu matrixMenu = new JMenu("Matrices");
         JRadioButtonMenuItem directedMenuItem = new JRadioButtonMenuItem("Dirigido", true);
         JRadioButtonMenuItem undirectedMenuItem = new JRadioButtonMenuItem("No Dirigido");
         JMenuItem exitMenuItem = new JMenuItem("Salir");
         JMenuItem aboutMenuItem = new JMenuItem("Acerca");
         JMenuItem dijkstraMenuItem = new JMenuItem("Dijkstra");
-        JMenuItem primMenuItem = new JMenuItem("Prim");
+        JMenuItem floydMenuItem = new JMenuItem("Floyd");
+        JMenuItem weightMatrixMenuItem = new JMenuItem("Matriz de Costos");
+        JMenuItem adjacencyMatrixMenuItem = new JMenuItem("Matriz de Adyacencia");
 
         directedMenuItem.setMnemonic(KeyEvent.VK_1);
         directedMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_MASK));
         undirectedMenuItem.setMnemonic(KeyEvent.VK_2);
         undirectedMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_MASK));
+        dijkstraMenuItem.setMnemonic(KeyEvent.VK_D);
+        dijkstraMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_MASK));
+        floydMenuItem.setMnemonic(KeyEvent.VK_F);
+        floydMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_MASK));
         aboutMenuItem.setMnemonic(KeyEvent.VK_F1);
         aboutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
         exitMenuItem.setMnemonic(KeyEvent.VK_Q);
@@ -61,18 +68,20 @@ public class MainWindow extends JFrame {
         menuGroup.add(undirectedMenuItem);
 
         algorithmsMenu.add(dijkstraMenuItem);
-        algorithmsMenu.add(primMenuItem);
+        algorithmsMenu.add(floydMenuItem);
 
         helpMenu.add(aboutMenuItem);
-
         graphMenu.add(directedMenuItem);
         graphMenu.add(undirectedMenuItem);
+        matrixMenu.add(weightMatrixMenuItem);
+        matrixMenu.add(adjacencyMatrixMenuItem);
         fileMenu.add(graphMenu);
-        fileMenu.add(algorithmsMenu);
         fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
 
         mainMenu.add(fileMenu);
+        mainMenu.add(algorithmsMenu);
+        mainMenu.add(matrixMenu);
         mainMenu.add(helpMenu);
 
         frame.setJMenuBar(mainMenu);

@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class GraphPanel extends JPanel {
         super();
         this.ellipses = new ArrayList<>();
         this.xLinesCoordinates = new ArrayList<>();
-        this.yLinesCoordinates =new ArrayList<>();
+        this.yLinesCoordinates = new ArrayList<>();
         this.count = 0;
         this.auxCount = 0;
         this.xBefore = 0;
@@ -63,17 +64,14 @@ public class GraphPanel extends JPanel {
                             auxCount = 0;
                             xLinesCoordinates.add(firstArrayPosition);
                             yLinesCoordinates.add(secondArrayPosition);
-                            repaint();
+                            panel.repaint();
                         }
                         else {
                             firstArrayPosition= arrayPosition(e);
                             auxCount++;
                         }
                     }
-                    else {
-                        auxCount = 0;
-                    }
-
+                    else auxCount = 0;
                 }
                 else {
                     xAux = e.getX();
@@ -98,7 +96,7 @@ public class GraphPanel extends JPanel {
                 }
                 else {
                     current = new Ellipse2D.Double((ellipses.get(count).getX() + e.getX()) - xBefore,(ellipses.get(count).getY()
-                            +e.getY()) - yBefore, DIMENSION, DIMENSION);
+                            + e.getY()) - yBefore, DIMENSION, DIMENSION);
                     ellipses.set(count, current);
                     xBefore = e.getX();
                     yBefore = e.getY();
@@ -118,8 +116,7 @@ public class GraphPanel extends JPanel {
     }
 
     private boolean isPositionCorrect(MouseEvent e) {
-        int x1 = e.getX();
-        int y1 = e.getY();
+        int x1 = e.getX(), y1 = e.getY();
 
         for (int i= 0; i < ellipses.size(); i++) {
             if((x1 > ellipses.get(i).getX()) && (x1 < ellipses.get(i).getX() + DIMENSION) && (y1 > ellipses.get(i).getY()) &&
@@ -133,12 +130,11 @@ public class GraphPanel extends JPanel {
     }
 
     private int arrayPosition(MouseEvent e) {
-        int x1 = e.getX();
-        int y1 = e.getY();
+        int x1 = e.getX(), y1 = e.getY();
 
         for (int i= 0; i < ellipses.size(); i++) {
-            if((x1 > ellipses.get(i).getX()) && (x1 < ellipses.get(i).getX() + 30) && (y1 > ellipses.get(i).getY()) &&
-                    (y1 < ellipses.get(i).getY() + 30)) {
+            if((x1 > ellipses.get(i).getX()) && (x1 < ellipses.get(i).getX() + DIMENSION) &&
+                    (y1 > ellipses.get(i).getY()) && (y1 < ellipses.get(i).getY() + DIMENSION)) {
                 count = i;
                 return i;
             }
@@ -180,7 +176,7 @@ public class GraphPanel extends JPanel {
 
             g2.setColor(Color.WHITE);
             g2.setFont(new Font("Monospaced", Font.BOLD, 12));
-            g2.drawString(String.valueOf(i + 1), (int) ellipses.get(i).getX(), (int) ellipses.get(i).getY());
+            g2.drawString(String.valueOf(i), (int) ellipses.get(i).getX(), (int) ellipses.get(i).getY());
         }
 
         // Lines
@@ -189,23 +185,25 @@ public class GraphPanel extends JPanel {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setStroke(new BasicStroke(2));
 
-            int lineX1 = (int) ellipses.get(xLinesCoordinates.get(i)).getCenterX();
-            int lineY1 = (int) ellipses.get(xLinesCoordinates.get(i)).getCenterY();
-            int lineX2 = (int) ellipses.get(yLinesCoordinates.get(i)).getCenterX();
-            int lineY2 = (int) ellipses.get(yLinesCoordinates.get(i)).getCenterY();
+            double lineX1 = ellipses.get(xLinesCoordinates.get(i)).getCenterX();
+            double lineY1 = ellipses.get(xLinesCoordinates.get(i)).getCenterY();
+            double lineX2 = ellipses.get(yLinesCoordinates.get(i)).getCenterX();
+            double lineY2 = ellipses.get(yLinesCoordinates.get(i)).getCenterY();
 
-            if (MainWindow.GRAPH_KIND == 1) { // If Directed
-                g2.drawLine(lineX1, lineY1, lineX2, lineY2);
-                Point startLine = new Point(lineX1, lineY1);
-                Point finishLine = new Point(lineX2, lineY2);
+            Line2D.Double line = new Line2D.Double(lineX1, lineY1, lineX2, lineY2);
+            if (MainWindow.GRAPH_KIND == 1) { // Directed
+                Point startLine = new Point((int) line.getX1(), (int) line.getY1());
+                Point finishLine = new Point((int) line.getX2(), (int) line.getY2());
+                g2.draw(line);
                 drawArrowHead(g2, finishLine, startLine, Color.BLACK);
             }
             else // Undirected
-                g2.drawLine(lineX1, lineY1, lineX2, lineY2);
+                g2.draw(line);
 
-            // g2.setColor(Color.WHITE);
-            // g2.setFont(new Font("Monospaced", Font.BOLD, 12));
-            // g2.drawString(String.valueOf());
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Monospaced", Font.BOLD, 12));
+            g2.drawString(String.valueOf(line.getBounds().getWidth()), (int) line.getBounds().getX(),
+                    (int) line.getBounds().getY());
         }
     }
 }

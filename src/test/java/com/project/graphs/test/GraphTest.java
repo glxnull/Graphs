@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class GraphTest {
 
-    GraphPanel graphPanel;
+    private GraphPanel graphPanel;
 
     @Before
     public void testComponents() {
